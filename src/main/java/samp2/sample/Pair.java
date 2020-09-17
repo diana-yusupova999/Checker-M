@@ -2,7 +2,7 @@ package samp2.sample;
 
 import java.util.Objects;
 
-public class Pair {
+public class Pair { // процент ужачности хода
     private int PieceMy;
     private int PieceOther;
 

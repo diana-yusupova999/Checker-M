@@ -46,7 +46,7 @@ public class GameStart {
         root.setPrefSize(WIDTH * TILE_SIZE, HEIGHT * TILE_SIZE);
         root.getChildren().addAll(tileGroup, pieceGroup);
 
-        for (int y = 0; y < HEIGHT; y++) {
+        for (int y = 0; y < HEIGHT; y++) { //расставление фигурок на поле
             for (int x = 0; x < WIDTH; x++) {
                 Tile tile = new TileForPeople((x + y) % 2 == 0, x, y);
                 board[x][y] = tile;
@@ -149,7 +149,7 @@ public class GameStart {
                 pieceList) {
             if (piece.getType() == PieceType.WHITE) flag = true;
         }
-        if (!flag) {
+        if (!flag) { //если игра закончена - начинаем новую
             gameMain = new GameStart();
         }
     }

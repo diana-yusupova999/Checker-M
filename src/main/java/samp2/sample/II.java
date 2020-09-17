@@ -18,7 +18,7 @@ public class II {
     private static final int depthII = 5;
     private HashMap<FirstTurn, Pair> turnHashMap;
 
-    private II(FirstTurn firstTurn, int depth, int pieceMy, int pieceOther, Rules rules, HashMap<FirstTurn, Pair> turnHashMap) throws CloneNotSupportedException, IOException, ClassNotFoundException {
+    private II(FirstTurn firstTurn, int depth, int pieceMy, int pieceOther, Rules rules, HashMap<FirstTurn, Pair> turnHashMap) {
         this.turn = rules.getTurn();
         this.depth = depth;
         this.pieceMy = pieceMy;
@@ -34,7 +34,7 @@ public class II {
             pair.setPieceMy(pair.getPieceMy() + pieceMy);
             pair.setPieceOther(pair.getPieceOther() + pieceOther);
         }
-         if (firstTurn == null) firstTurn = null;
+         //if (firstTurn == null) firstTurn = null;
     }
 
     public void evaluate() throws CloneNotSupportedException, IOException, ClassNotFoundException {
