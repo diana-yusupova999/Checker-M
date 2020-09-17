@@ -10,14 +10,14 @@ import java.nio.file.Files;
 import java.util.ArrayList;
 
 public class RulesForPeopleTest {
-    //red pawn, white pawn, red king, white king, red tile, white tile
+    //red pawn, white pawn, red tile, white tile
     public static final String RP = "R";
     public static final String WP = "W";
     public static final String RT = "*";
     public static final String WT = "#";
 
     @Test
-    void tryMoveTest() {
+    void tryMoveTest() { // проверка результата хода
         assertMoveTypeEquals(1, 2, 2, 3, PieceType.RED, MoveType.NORMAL);
         assertMoveTypeEquals(5, 5, 4, 4, PieceType.WHITE, MoveType.NONE);
         String[][] stringBoard = new String[][]{
@@ -35,6 +35,14 @@ public class RulesForPeopleTest {
         assertMoveTypeEquals(parseBoardFromFile("test1.txt"), 3, 4, 1, 2, PieceType.WHITE, MoveType.KILL);
     }
 
+    @Test
+    public void testEnemyWasKilled(){ // пешка срублена
+        ArrayList<Piece> pieceList = new ArrayList<>();
+        Rules rules = initDefaultRules(initParsedBoard(parseBoardFromFile("test1.txt"), pieceList), pieceList);
+        assertMoveTypeEquals(rules, 3, 4, 1, 2, PieceType.WHITE, MoveType.KILL);
+        Assertions.assertFalse(pieceList.contains(new PieceForPeople(PieceType.RED, 2, 3)));
+    }
+
     private void assertMoveTypeEquals(int oldX, int oldY, int newX, int newY, PieceType pieceType, MoveType expectedMoveType) {
         assertMoveTypeEquals(this::initDefaultBoard, oldX, oldY, newX, newY, pieceType, expectedMoveType);
     }
@@ -44,17 +52,14 @@ public class RulesForPeopleTest {
     }
 
     private void assertMoveTypeEquals(BoardConstructor boardConstructor, int oldX, int oldY, int newX, int newY, PieceType pieceType, MoveType expectedMoveType) {
-        Piece testPawn = new PieceForPeople(pieceType, oldX, oldY);
         ArrayList<Piece> pieceList = new ArrayList<>();
-        Rules rules = initDefaultRules(boardConstructor.construct(pieceList), pieceList);
-        MoveResult moveResult = rules.tryMove(testPawn, newX, newY);
-        Assertions.assertEquals(expectedMoveType, moveResult.getType());
+        assertMoveTypeEquals(initDefaultRules(boardConstructor.construct(pieceList), pieceList), oldX, oldY, newX, newY, pieceType, expectedMoveType);
     }
 
-    private Rules initDefaultRules() {
-        ArrayList<Piece> pieceList = new ArrayList<>();
-        Tile[][] board = initDefaultBoard(pieceList);
-        return initDefaultRules(board, pieceList);
+    private void assertMoveTypeEquals(Rules rules, int oldX, int oldY, int newX, int newY, PieceType pieceType, MoveType expectedMoveType) {
+        Piece testPawn = new PieceForPeople(pieceType, oldX, oldY);
+        MoveResult moveResult = rules.tryMove(testPawn, newX, newY);
+        Assertions.assertEquals(expectedMoveType, moveResult.getType());
     }
 
     private Rules initDefaultRules(Tile[][] board, ArrayList<Piece> pieceList) {
